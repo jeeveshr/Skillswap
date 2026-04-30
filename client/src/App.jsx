@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Zap, Users, BookOpen, Brain, Settings, Bell, LogOut, MessageSquare } from 'lucide-react';
 import DiscoverView from './components/DiscoverView';
 import MatchView from './components/MatchView';
+import CommunityView from './components/CommunityView';
 
 function App() {
   const [activeTab, setActiveTab] = useState('discover');
@@ -15,23 +16,28 @@ function App() {
           <div className="w-10 h-10 bg-accent-purple rounded-xl flex items-center justify-center shadow-[0_0_20px_rgba(168,85,247,0.4)]">
             <Zap className="text-white fill-white" size={24} />
           </div>
-          <span className="text-2xl font-black tracking-tighter text-white">SKILLSWAP</span>
+          <span className="text-2xl font-black tracking-tighter text-white uppercase">SkillSwap.</span>
         </div>
 
-        <div className="hidden md:flex items-center gap-8 text-sm font-medium">
+        <div className="hidden md:flex items-center gap-8 text-sm font-bold uppercase tracking-widest">
           <button 
             onClick={() => setActiveTab('discover')}
-            className={`transition-colors ${activeTab === 'discover' ? 'text-accent-electric' : 'hover:text-white'}`}
+            className={`transition-all ${activeTab === 'discover' ? 'text-accent-electric' : 'text-slate-500 hover:text-white'}`}
           >
             Discover
           </button>
           <button 
             onClick={() => setActiveTab('matches')}
-            className={`transition-colors ${activeTab === 'matches' ? 'text-accent-electric' : 'hover:text-white'}`}
+            className={`transition-all ${activeTab === 'matches' ? 'text-accent-electric' : 'text-slate-500 hover:text-white'}`}
           >
             Matches
           </button>
-          <a href="#" className="hover:text-white">Community</a>
+          <button 
+            onClick={() => setActiveTab('community')}
+            className={`transition-all ${activeTab === 'community' ? 'text-accent-electric' : 'text-slate-500 hover:text-white'}`}
+          >
+            Community
+          </button>
         </div>
 
         <div className="flex items-center gap-4">
@@ -39,7 +45,7 @@ function App() {
             <Bell size={20} />
             <span className="absolute top-2 right-2 w-2 h-2 bg-accent-electric rounded-full"></span>
           </button>
-          <div className="w-10 h-10 rounded-full border border-white/10 overflow-hidden">
+          <div className="w-10 h-10 rounded-full border border-white/10 overflow-hidden cursor-pointer hover:border-accent-purple transition-colors">
             <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="Profile" />
           </div>
         </div>
@@ -51,14 +57,18 @@ function App() {
           <motion.h1 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-4xl md:text-6xl font-black mb-4 bg-gradient-to-r from-white to-white/40 bg-clip-text text-transparent"
+            className="text-4xl md:text-7xl font-black mb-4 bg-gradient-to-r from-white via-white to-white/20 bg-clip-text text-transparent leading-none"
           >
-            {activeTab === 'discover' ? 'Explore New Skills' : 'Your Perfect Matches'}
+            {activeTab === 'discover' ? 'Learn something \nnew today.' : 
+             activeTab === 'matches' ? 'Your people \nare here.' : 
+             'The SkillSwap \nCircle.'}
           </motion.h1>
-          <p className="text-slate-400 text-lg">
+          <p className="text-slate-400 text-lg max-w-2xl">
             {activeTab === 'discover' 
-              ? 'Connect with mentors and learners in our global decentralized network.' 
-              : 'Collaborate with people who have exactly what you need.'}
+              ? 'Browse the network to find mentors, collaborators, and friends who want to trade knowledge.' 
+              : activeTab === 'matches'
+              ? 'We found these people who need your skills and have exactly what you want to learn.'
+              : 'Join the discussion, share your progress, and celebrate your wins with the community.'}
           </p>
         </header>
 
@@ -67,12 +77,14 @@ function App() {
           <AnimatePresence mode="wait">
             <motion.div
               key={activeTab}
-              initial={{ opacity: 0, x: activeTab === 'discover' ? -20 : 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: activeTab === 'discover' ? 20 : -20 }}
-              transition={{ duration: 0.3, ease: "easeInOut" }}
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.98 }}
+              transition={{ duration: 0.3, ease: "anticipate" }}
             >
-              {activeTab === 'discover' ? <DiscoverView /> : <MatchView />}
+              {activeTab === 'discover' ? <DiscoverView /> : 
+               activeTab === 'matches' ? <MatchView /> : 
+               <CommunityView />}
             </motion.div>
           </AnimatePresence>
         </div>

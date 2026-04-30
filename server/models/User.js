@@ -52,8 +52,8 @@ const userSchema = new mongoose.Schema({
   toObject: { virtuals: true }
 });
 
-// Indexing for faster matching
-userSchema.index({ teaching: 1, learning: 1 });
+// Remove parallel array index as it's not supported in MongoDB
+// userSchema.index({ teaching: 1, learning: 1 });
 
 const User = mongoose.model('User', userSchema);
 

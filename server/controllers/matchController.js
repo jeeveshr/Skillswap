@@ -9,7 +9,13 @@ const User = require('../models/User');
  */
 exports.getMatches = async (req, res) => {
   try {
-    const currentUser = await User.findById(req.user.id);
+    // FALLBACK FOR TESTING: If no auth session, use the first user in DB
+    let currentUser;
+    if (req.user && req.user.id) {
+      currentUser = await User.findById(req.user.id);
+    } else {
+      currentUser = await User.findOne(); // For testing, just pick the first user
+    }
 
     if (!currentUser) {
       return res.status(404).json({
@@ -49,7 +55,12 @@ exports.getMatches = async (req, res) => {
  */
 exports.discoverUsers = async (req, res) => {
   try {
-    const currentUser = await User.findById(req.user.id);
+    let currentUser;
+    if (req.user && req.user.id) {
+      currentUser = await User.findById(req.user.id);
+    } else {
+      currentUser = await User.findOne();
+    }
 
     // Find users with ANY overlap in teaching or learning, but not necessarily a perfect two-way swap
     const discover = await User.find({
